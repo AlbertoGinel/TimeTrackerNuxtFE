@@ -30,7 +30,7 @@ export const useActivitiesStore = defineStore('activities', () => {
       error.value = null
 
       const { data, error: fetchError } = await useFetch<Activity[]>(
-        '/activities/',
+        '/api/activities/',
         {
           baseURL: apiBaseUrl,
           method: 'GET',
@@ -61,7 +61,7 @@ export const useActivitiesStore = defineStore('activities', () => {
       error.value = null
 
       const { data, error: fetchError } = await useFetch<Activity>(
-        '/activities/',
+        '/api/activities/',
         {
           baseURL: apiBaseUrl,
           method: 'POST',
