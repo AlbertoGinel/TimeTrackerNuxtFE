@@ -11,6 +11,9 @@ export const useActivitiesStore = defineStore('activities', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
+  // Get API base URL from environment variables
+  const apiBaseUrl = process.env.NUXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'
+
   // Helper function to handle errors
   function handleError(err: unknown): string {
     if (err instanceof Error) {
@@ -22,7 +25,7 @@ export const useActivitiesStore = defineStore('activities', () => {
   }
 
   // Actions
-  async function fetchActivities(apiBaseUrl: string) {
+  async function fetchActivities() {  // Removed apiBaseUrl parameter
     const authStore = useAuthStore()
 
     try {
@@ -32,7 +35,7 @@ export const useActivitiesStore = defineStore('activities', () => {
       const { data, error: fetchError } = await useFetch<Activity[]>(
         '/api/activities/',
         {
-          baseURL: apiBaseUrl,
+          baseURL: apiBaseUrl,  // Using the store's apiBaseUrl
           method: 'GET',
           headers: {
             Authorization: `Bearer ${authStore.accessToken}`,
@@ -53,7 +56,7 @@ export const useActivitiesStore = defineStore('activities', () => {
     }
   }
 
-  async function createActivity(activityData: ActivityForm, apiBaseUrl: string) {
+  async function createActivity(activityData: ActivityForm) {  // Removed apiBaseUrl parameter
     const authStore = useAuthStore()
 
     try {
@@ -63,7 +66,7 @@ export const useActivitiesStore = defineStore('activities', () => {
       const { data, error: fetchError } = await useFetch<Activity>(
         '/api/activities/',
         {
-          baseURL: apiBaseUrl,
+          baseURL: apiBaseUrl,  // Using the store's apiBaseUrl
           method: 'POST',
           body: activityData,
           headers: {
@@ -84,13 +87,12 @@ export const useActivitiesStore = defineStore('activities', () => {
     } catch (err) {
       console.error('Error creating activity:', err)
       error.value = handleError(err)
-      throw err // Re-throw the error for the calling component to handle if needed
+      throw err
     } finally {
       loading.value = false
     }
   }
 
-  // Expose state and actions
   return {
     activities,
     loading,

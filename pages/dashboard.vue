@@ -123,7 +123,7 @@ definePageMeta({
 
 onMounted(async () => {
   await Promise.all([
-    activitiesStore.fetchActivities(config.public.apiBaseUrl),
+    activitiesStore.fetchActivities(),
     timeSectionsStore.fetchAll(), // Replaces both stamps and intervals fetches
   ]);
 });
